@@ -1,8 +1,8 @@
-;IDL³ÌÐò
+;IDLç¨‹åº
 PRO tendency
-  ;ÉèÖÃ±àÒë»·¾³
+  ;è®¾ç½®ç¼–è¯‘çŽ¯å¢ƒ
   COMPILE_OPT IDL2
-  ;ÉèÖÃ²ÎÊý£¬ºóÌ¨µ÷ÓÃENVIº¯Êý»·¾³
+  ;è®¾ç½®å‚æ•°ï¼ŒåŽå°è°ƒç”¨ENVIå‡½æ•°çŽ¯å¢ƒ
   ENVI,/RESTORE_BASE_SAVE_FILES,/NO_STATUS_WINDOW
   ENVI_BATCH_INIT, log_file='batch.txt'
  
@@ -14,35 +14,35 @@ PRO tendency
   filenames=FILE_SEARCH(in_name,'*.tif')
   
   name=filenames[0]
-  ;´ò¿ªÒ»¸öÍ¼Ïñ£¬»ñÈ¡ÐÐÁÐÊý£¬Í¶Ó°ÐÅÏ¢
+  ;æ‰“å¼€ä¸€ä¸ªå›¾åƒï¼ŒèŽ·å–è¡Œåˆ—æ•°ï¼ŒæŠ•å½±ä¿¡æ¯
   ENVI_OPEN_FILE,name,r_fid=fid,/no_realize;directory and file name, to be modified
   IF (fid EQ -1) THEN BEGIN
-    info=DIALOG_MESSAGE('Î´ÕÒµ½Êý¾Ý£¬ÇëÈ·ÈÏÂ·¾¶»òÎÄ¼þÃû¸ñÊ½ÊÇ·ñÕýÈ·£¡')
+    info=DIALOG_MESSAGE('æœªæ‰¾åˆ°æ•°æ®ï¼Œè¯·ç¡®è®¤è·¯å¾„æˆ–æ–‡ä»¶åæ ¼å¼æ˜¯å¦æ­£ç¡®ï¼')
     RETURN
   ENDIF
   ENVI_FILE_QUERY, fid, ns=ns, nl=nl, nb=nb, dims=dims
   map_info=ENVI_GET_MAP_INFO(fid=fid)
-  ;»ñÈ¡ÎÄ¼þ¸öÊý
+  ;èŽ·å–æ–‡ä»¶ä¸ªæ•°
   n = N_ELEMENTS(filenames)
-  ;¸ù¾ÝÎÄ¼þÃû£¬»ñµÃÒò×ÓµÄÊ±¼äÐòÁÐ
+  ;æ ¹æ®æ–‡ä»¶åï¼ŒèŽ·å¾—å› å­çš„æ—¶é—´åºåˆ—
   t=FLTARR(n)
   FOR i=0,n-1 DO BEGIN
     time = STRMID(filenames[i],STRPOS(filenames[i],'2'),4)
     t[i] = FLOAT(time)
   ENDFOR
-  ;´´½¨ÈýÎ¬Êý×é±£´æÊý¾Ý
+  ;åˆ›å»ºä¸‰ç»´æ•°ç»„ä¿å­˜æ•°æ®
   data=FLTARR(ns,nl,n)
   FOR i=0,n-1 DO BEGIN
     ENVI_OPEN_FILE,filenames[i],r_fid=fid,/no_realize;directory and file name, to be modified
     IF (fid EQ -1) THEN BEGIN
-      info=DIALOG_MESSAGE('Î´ÕÒµ½Êý¾Ý£¬ÇëÈ·ÈÏÂ·¾¶»òÎÄ¼þÃû¸ñÊ½ÊÇ·ñÕýÈ·£¡')
+      info=DIALOG_MESSAGE('æœªæ‰¾åˆ°æ•°æ®ï¼Œè¯·ç¡®è®¤è·¯å¾„æˆ–æ–‡ä»¶åæ ¼å¼æ˜¯å¦æ­£ç¡®ï¼')
       RETURN
     ENDIF
     data[*,*,i]=ENVI_GET_DATA(fid=fid,dims=dims,pos=0)
   ENDFOR
-  ;ÖðÏñÔªÄâºÏ
-  slp=FLTARR(ns,nl) ;´´½¨Êý×é±£´æÐ±ÂÊ¼ÆËã½á¹û
-  r=FLTARR(ns,nl) ;´´½¨Êý×é±£´æÏà¹ØÏµÊý¼ÆËã½á¹û
+  ;é€åƒå…ƒæ‹Ÿåˆ
+  slp=FLTARR(ns,nl) ;åˆ›å»ºæ•°ç»„ä¿å­˜æ–œçŽ‡è®¡ç®—ç»“æžœ
+  r=FLTARR(ns,nl) ;åˆ›å»ºæ•°ç»„ä¿å­˜ç›¸å…³ç³»æ•°è®¡ç®—ç»“æžœ
   FOR i=0,ns-1 DO BEGIN
     FOR j=0,nl-1 DO BEGIN
       
