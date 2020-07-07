@@ -1,11 +1,11 @@
-[a,R]=geotiffread('E:\QHTimeSeries\QH_L5_2010_NDVImax_fvc.tif');%ÏÈµ¼ÈëÄ³¸öÍ¼ÏñµÄÍ¶Ó°ÐÅÏ¢£¬ÎªºóÐøÍ¼ÏñÊä³ö×ö×¼È·
-info=geotiffinfo('E:\QHTimeSeries\QH_L5_2010_NDVImax_fvc.tif');
+[a,R]=geotiffread('E:\TimeSeries\time2010.tif');%å…ˆå¯¼å…¥æŸä¸ªå›¾åƒçš„æŠ•å½±ä¿¡æ¯ï¼Œä¸ºåŽç»­å›¾åƒè¾“å‡ºåšå‡†ç¡®
+info=geotiffinfo('E:\TimeSeries\time2010.tif');
 [m,n]=size(a);
-years=10; %±íÊ¾ÓÐ¶àÉÙÄê·ÝÐèÒª×ö»Ø¹é
+years=10; %è¡¨ç¤ºæœ‰å¤šå°‘å¹´ä»½éœ€è¦åšå›žå½’
 data=zeros(m*n,years);
 k=1;
-for year=2010:2019 %ÆðÊ¼Äê·Ý
-    file=['E:\QHTimeSeries\QH_L5_',int2str(year),'_NDVImax_fvc.tif'];%×¢Òâ×Ô¼ºµÄÃû×ÖÐÎÊ½£¬ÕâÀïÊ¹ÓÃµÄÃû×ÖÊÇÄêprec2000.tif£¬¸ù¾ÝÕâ¸ö¿ÉÐÞ¸Ä
+for year=2010:2019 %èµ·å§‹å¹´ä»½
+    file=['E:\TimeSeries\time',int2str(year),'.tif'];%æ³¨æ„è‡ªå·±çš„åå­—å½¢å¼ï¼Œè¿™é‡Œä½¿ç”¨çš„åå­—æ˜¯time2010.tifï¼Œæ ¹æ®è¿™ä¸ªå¯ä¿®æ”¹
     bz=importdata(file);
     bz=reshape(bz,m*n,1);
     data(:,k)=bz;
@@ -14,7 +14,7 @@ end
     xielv=zeros(m,n);p=zeros(m,n);R2=zeros(m,n);
 for i=1:length(data)
     bz=data(i,:);
-    if max(bz)>0 %×¢ÒâÕâÊÇ½øÐÐÅÐ¶ÏÓÐÐ§Öµ·¶Î§£¬Èç¹ûÓÐÐ§·¶Î§ÊÇ-1µ½1£¬Ôò¸Ä³Émax(bz)>-1¼´¿É
+    if max(bz)>0 %æ³¨æ„è¿™æ˜¯è¿›è¡Œåˆ¤æ–­æœ‰æ•ˆå€¼èŒƒå›´ï¼Œå¦‚æžœæœ‰æ•ˆèŒƒå›´æ˜¯-1åˆ°1ï¼Œåˆ™æ”¹æˆmax(bz)>-1å³å¯
         bz=bz';
         X=[ones(size(bz)) bz];
         X(:,2)=[1:years]';
@@ -26,13 +26,13 @@ for i=1:length(data)
         xielv(i)=b(2);
     end
 end
-name1='E:\QHTimeSeries\QHÒ»ÔªÏßÐÔ»Ø¹é10-19Ç÷ÊÆÖµ.tif';
-name2='E:\QHTimeSeries\QHÒ»ÔªÏßÐÔ»Ø¹é10-19_PÖµ.tif';
-name3='E:\QHTimeSeries\QHÒ»ÔªÏßÐÔ»Ø¹é10-19_R·½.tif';
+name1='E:\TimeSeries\ä¸€å…ƒçº¿æ€§å›žå½’10-19è¶‹åŠ¿å€¼.tif';
+name2='E:\TimeSeries\ä¸€å…ƒçº¿æ€§å›žå½’10-19_På€¼.tif';
+name3='E:\TimeSeries\ä¸€å…ƒçº¿æ€§å›žå½’10-19_Ræ–¹.tif';
 geotiffwrite(name1,xielv,R,'GeoKeyDirectoryTag',info.GeoTIFFTags.GeoKeyDirectoryTag);
 geotiffwrite(name2,p,R,'GeoKeyDirectoryTag',info.GeoTIFFTags.GeoKeyDirectoryTag);
 geotiffwrite(name3,R2,R,'GeoKeyDirectoryTag',info.GeoTIFFTags.GeoKeyDirectoryTag);
-%Ò»°ãÀ´Ëµ£¬Ö»ÓÐÍ¨¹ýÏÔÖøÐÔ¼ìÑéµÄÇ÷ÊÆÖµ²ÅÊÇ¿É¿¿µÄ
+%ä¸€èˆ¬æ¥è¯´ï¼Œåªæœ‰é€šè¿‡æ˜¾è‘—æ€§æ£€éªŒçš„è¶‹åŠ¿å€¼æ‰æ˜¯å¯é çš„
 xielv(p>0.05)=NaN;
-name1='E:\QHTimeSeries\Í¨¹ýÏÔÖøÐÔ0.05¼ìÑéµÄQHÒ»ÔªÏßÐÔ»Ø¹é10-19Ç÷ÊÆÖµ.tif';
+name1='E:\QHTimeSeries\é€šè¿‡æ˜¾è‘—æ€§0.05æ£€éªŒçš„QHä¸€å…ƒçº¿æ€§å›žå½’10-19è¶‹åŠ¿å€¼.tif';
 geotiffwrite(name1,xielv,R,'GeoKeyDirectoryTag',info.GeoTIFFTags.GeoKeyDirectoryTag);
